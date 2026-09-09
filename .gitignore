@@ -9,3 +9,6 @@ airflow_logs/
 htmlcov/
 .mypy_cache/
 .ruff_cache/
+
+# Assessment material
+Assignment__Dockerized_Data_Pipeline_with_Airflow_DagsterObjective_*.pdf
