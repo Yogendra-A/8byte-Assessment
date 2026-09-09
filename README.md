@@ -24,9 +24,18 @@ The Airflow DAG has three tasks:
 
 The database uses `(symbol, price_date)` as the primary key, so running the pipeline multiple times does not create duplicate records.
 
+## Pipeline in Action
+
+### Airflow DAG
+
+![Airflow DAG](docs/airflow-dag.png)
+
+The DAG runs three steps: fetching the stock data, validating the response, and updating PostgreSQL.
+
 ## Project Structure
 
-.
+```text
+8bytes/
 ├── dags/
 │   └── stock_pipeline.py
 ├── src/
@@ -39,12 +48,15 @@ The database uses `(symbol, price_date)` as the primary key, so running the pipe
 │   └── test_transform.py
 ├── sql/
 │   └── init.sql
+├── docs/
+│   └── airflow-dag.png
 ├── Dockerfile
 ├── docker-compose.yml
 ├── requirements.txt
 ├── .env.example
 ├── .gitignore
 └── README.md
+```
 
 ## Configuration
 
@@ -52,6 +64,7 @@ Create a `.env` file from `.env.example` and add your values.
 
 Required variables:
 
+```text
 STOCK_API_KEY=your_api_key
 STOCK_SYMBOL=AAPL
 
@@ -61,6 +74,7 @@ POSTGRES_PASSWORD=your_password
 
 AIRFLOW_ADMIN_USERNAME=admin
 AIRFLOW_ADMIN_PASSWORD=your_password
+```
 
 The `.env` file is ignored by Git and should not be committed.
 
@@ -68,34 +82,44 @@ The `.env` file is ignored by Git and should not be committed.
 
 Make sure Docker Desktop is running.
 
-Run the complete pipeline with:
+Build and start the complete pipeline with:
 
+```bash
 docker compose up --build
+```
 
 Airflow will be available at:
 
+```text
 http://localhost:8080
+```
 
 Log in using the Airflow credentials configured in `.env`.
 
 Enable the `stock_market_pipeline` DAG and trigger it manually, or let the configured schedule run it.
 
-## Check the data
+## Check the Data
 
 To open a PostgreSQL shell:
 
+```bash
 docker compose exec postgres psql -U stock_user -d stock_pipeline
+```
 
 Then run:
 
+```sql
 SELECT *
 FROM stock_prices
 ORDER BY price_date DESC
 LIMIT 10;
+```
 
 You can also check the number of stored records:
 
+```sql
 SELECT COUNT(*) FROM stock_prices;
+```
 
 ## Error Handling
 
@@ -116,7 +140,9 @@ Airflow retries failed tasks automatically.
 
 Run the tests with:
 
+```bash
 python -m pytest -q
+```
 
 The tests mock API and database calls, so they do not require a live Alpha Vantage request.
 
@@ -141,9 +167,11 @@ The pipeline uses PostgreSQL UPSERT logic with `ON CONFLICT`, so running the pip
 
 The default schedule is `@daily`.
 
-This is configurable using:
+It can be configured using:
 
+```text
 STOCK_SCHEDULE=@daily
+```
 
 The daily schedule is used because the Alpha Vantage free tier has API request limits.
 
