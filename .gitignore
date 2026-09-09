@@ -1,0 +1,11 @@
+.env
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+airflow_logs/
+*.log
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
