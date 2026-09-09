@@ -32,14 +32,6 @@ The database uses `(symbol, price_date)` as the primary key, so running the pipe
 
 The DAG runs three steps: fetching the stock data, validating the response, and updating PostgreSQL.
 
-## Pipeline in Action
-
-### Airflow DAG
-
-![Airflow DAG](docs/airflow-dag.png)
-
-The DAG runs three steps: fetching the stock data, validating the response, and updating PostgreSQL.
-
 ## Project Structure
 
 ```text
